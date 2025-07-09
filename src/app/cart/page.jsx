@@ -8,43 +8,98 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Minus, Plus, Trash2 } from "lucide-react"
 import Header from "../components/Header"
 import Footer from "../components/Footer"
-
-interface CartItem {
-  id: number
-  name: string
-  price: number
-  image: string
-  quantity: number
-}
+import { jwtDecode } from "jwt-decode"
 
 export default function CartPage() {
-  const [cartItems, setCartItems] = useState<CartItem[]>([])
+  const [cartItems, setCartItems] = useState([])
   const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [userId, setUserId] = useState(null)
+  const [showOrderHistoryBtn, setShowOrderHistoryBtn] = useState(false)
   const router = useRouter()
 
-  useEffect(() => {
-    const cart = JSON.parse(localStorage.getItem("cart") || "[]")
-    setCartItems(cart)
+  // Helper to get user from localStorage (prefer token)
+  const getUser = () => {
+    const token = localStorage.getItem("token")
+    if (token) {
+      try {
+        return jwtDecode(token)
+      } catch {
+        // fallback to user if token is invalid
+      }
+    }
+    const userStr = localStorage.getItem("user")
+    if (!userStr) return null
+    try {
+      return JSON.parse(userStr)
+    } catch {
+      return null
+    }
+  }
 
-    const user = localStorage.getItem("user")
-    setIsLoggedIn(!!user)
+  // Helper to get cart key
+  const getCartKey = (user) => {
+    if (user && (user.id || user.userId)) return `cart_${user.id || user.userId}`
+    if (user && user.email) return `cart_${user.email}`
+    return "cart_guest"
+  }
+
+  // Load cart and user info
+  const loadCartAndUser = () => {
+    const user = getUser()
+    const isUserLoggedIn = !!user
+    console.log("Cart: User logged in:", isUserLoggedIn, "User:", user)
+    setIsLoggedIn(isUserLoggedIn)
+    setUserId(user?.id || user?.userId || user?.email || null)
+    const cartKey = getCartKey(user)
+    const cart = JSON.parse(localStorage.getItem(cartKey) || "[]")
+    setCartItems(cart)
+  }
+
+  useEffect(() => {
+    loadCartAndUser()
+    
+    // Listen for localStorage changes (login/logout/cart update from other tabs)
+    const handleStorage = (e) => {
+      loadCartAndUser()
+    }
+    
+    // Listen for custom logout event
+    const handleLogout = () => {
+      setIsLoggedIn(false)
+      setUserId(null)
+      loadCartAndUser()
+    }
+    
+    window.addEventListener("storage", handleStorage)
+    window.addEventListener("logout", handleLogout)
+    
+    return () => {
+      window.removeEventListener("storage", handleStorage)
+      window.removeEventListener("logout", handleLogout)
+    }
   }, [])
 
-  const updateQuantity = (id: number, newQuantity: number) => {
+  // Update cart in localStorage for current user
+  const saveCart = (updatedCart) => {
+    const user = getUser()
+    const cartKey = getCartKey(user)
+    localStorage.setItem(cartKey, JSON.stringify(updatedCart))
+  }
+
+  const updateQuantity = (id, newQuantity) => {
     if (newQuantity === 0) {
       removeItem(id)
       return
     }
-
     const updatedCart = cartItems.map((item) => (item.id === id ? { ...item, quantity: newQuantity } : item))
     setCartItems(updatedCart)
-    localStorage.setItem("cart", JSON.stringify(updatedCart))
+    saveCart(updatedCart)
   }
 
-  const removeItem = (id: number) => {
+  const removeItem = (id) => {
     const updatedCart = cartItems.filter((item) => item.id !== id)
     setCartItems(updatedCart)
-    localStorage.setItem("cart", JSON.stringify(updatedCart))
+    saveCart(updatedCart)
   }
 
   const getTotalPrice = () => {
@@ -57,8 +112,21 @@ export default function CartPage() {
     } else {
       // Process purchase
       alert("Purchase successful! Thank you for your order.")
-      localStorage.removeItem("cart")
+      const user = getUser()
+      const cartKey = getCartKey(user)
+      // Save order history
+      const ordersKey = user && (user.id || user.userId || user.email) ? `orders_${user.id || user.userId || user.email}` : null
+      if (ordersKey) {
+        const prevOrders = JSON.parse(localStorage.getItem(ordersKey) || "[]")
+        prevOrders.push({
+          date: new Date().toISOString(),
+          items: cartItems
+        })
+        localStorage.setItem(ordersKey, JSON.stringify(prevOrders))
+      }
+      localStorage.removeItem(cartKey)
       setCartItems([])
+      setShowOrderHistoryBtn(true)
     }
   }
 
@@ -70,6 +138,11 @@ export default function CartPage() {
           <h1 className="text-3xl font-bold mb-8">Your Cart is Empty</h1>
           <p className="text-gray-600 mb-8">Add some products to your cart to get started!</p>
           <Button onClick={() => router.push("/")}>Continue Shopping</Button>
+          {showOrderHistoryBtn && (
+            <div className="mt-6">
+              <Button onClick={() => router.push("/orders")}>View Order History</Button>
+            </div>
+          )}
         </div>
         <Footer />
       </div>
@@ -152,9 +225,16 @@ export default function CartPage() {
                   </div>
                 </div>
 
-                <Button onClick={handleBuy} className="w-full" size="lg">
-                  {isLoggedIn ? "Buy Now" : "Login to Buy"}
-                </Button>
+                {console.log("Cart: Rendering button, isLoggedIn:", isLoggedIn)}
+                {isLoggedIn ? (
+                  <Button onClick={handleBuy} className="w-full" size="lg">
+                    Buy Now
+                  </Button>
+                ) : (
+                  <Button onClick={() => router.push("/login")} className="w-full" size="lg">
+                    Login to Buy
+                  </Button>
+                )}
               </CardContent>
             </Card>
           </div>
