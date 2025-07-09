@@ -8,12 +8,12 @@ export default function AboutPage() {
 
       <div className="container mx-auto px-4 py-16">
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-4xl font-bold text-center mb-8 text-gray-800">About ShopEasy</h1>
+          <h1 className="text-4xl font-bold text-center mb-8 text-gray-800">About AmronShop</h1>
 
           <div className="bg-white rounded-lg shadow-md p-8 mb-8">
             <h2 className="text-2xl font-semibold mb-4 text-blue-600">Our Story</h2>
             <p className="text-gray-600 leading-relaxed mb-6">
-              Welcome to ShopEasy, your trusted online shopping destination! We started with a simple mission: to make
+              Welcome to AmronShop, your trusted online shopping destination! We started with a simple mission: to make
               quality products accessible to everyone at affordable prices. Since our inception, we've been committed to
               providing an exceptional shopping experience for our customers.
             </p>
@@ -44,7 +44,7 @@ export default function AboutPage() {
           </div>
 
           <div className="bg-white rounded-lg shadow-md p-8 mt-8">
-            <h3 className="text-2xl font-semibold mb-4 text-blue-600">Why Choose ShopEasy?</h3>
+            <h3 className="text-2xl font-semibold mb-4 text-blue-600">Why Choose AmronShop?</h3>
             <div className="grid md:grid-cols-3 gap-6">
               <div className="text-center">
                 <div className="bg-blue-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">

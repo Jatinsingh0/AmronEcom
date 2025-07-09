@@ -1,4 +1,4 @@
-# ShopEasy - E-commerce Platform
+# AmronShop - E-commerce Platform
 
 A modern e-commerce app built with Next.js 15, featuring user authentication, shopping cart, and responsive design.
 
@@ -12,10 +12,10 @@ A modern e-commerce app built with Next.js 15, featuring user authentication, sh
 
 ## 🛠️ Tech Stack
 
-- **Frontend**: Next.js 15, React 19, Tailwind CSS
+- **Frontend**: Next.js 15, Tailwind CSS
 - **Backend**: Next.js API Routes, MongoDB
 - **Authentication**: JWT, bcryptjs
-- **UI**: Radix UI components
+- **UI**: Radix UI components, 
 
 ## 📦 Quick Start
 
@@ -33,12 +33,6 @@ A modern e-commerce app built with Next.js 15, featuring user authentication, sh
    JWT_SECRET=your_jwt_secret_key
    ```
 
-3. **Run the app**
-   ```bash
-   npm run dev
-   ```
-   Open [http://localhost:3000](http://localhost:3000)
-
 ## 📁 Project Structure
 
 ```
@@ -53,19 +47,7 @@ ecom/
 └── src/lib/            # Utilities
 ```
 
-## 🔧 Scripts
-
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run start` - Start production server
-
-## 🚀 Deploy
-
-**Vercel** (Recommended):
-- Connect GitHub repo
-- Add environment variables
-- Deploy automatically
 
 ---
 
-**ShopEasy** - Simple and secure online shopping! 🛒
+**AmronShop** - Simple and secure online shopping! 🛒
