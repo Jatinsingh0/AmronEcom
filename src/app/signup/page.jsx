@@ -246,7 +246,7 @@ export default function SignupPage() {
             <DialogTitle className="text-center text-green-600">Success!</DialogTitle>
           </DialogHeader>
           <div className="text-center py-4">
-            <p className="mb-4">Thank you for signing up! Now login here.</p>
+            <p className="mb-4">Thank you for signing up! Now login here to start shopping.</p>
             <Button onClick={() => router.push("/login")}>Go to Login</Button>
           </div>
         </DialogContent>
