@@ -4,7 +4,7 @@ import "./globals.css"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata = {
-  title: "ShopEasy - Your Online Shopping Destination",
+  title: "AmronShop - Your Online Shopping Destination",
   description: "Discover amazing products at unbeatable prices. Shop t-shirts, shoes, lowers, jeans and more!",
 }
 
