@@ -15,6 +15,9 @@
     z-index: 2;
     position: relative; // Added to ensure proper stacking
     width: 48%; // Added to constrain width and prevent overlap
+    margin-left: 0; // Force left alignment
+    margin-right: auto; // Push content to the left
+    align-self: flex-start; // Ensure it stays at the start
 
     .content {
       max-width: 600px;
