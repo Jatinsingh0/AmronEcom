@@ -13,6 +13,8 @@
     justify-content: flex-start;
     padding: 95px 0px 1px 0px;
     z-index: 2;
+    position: relative; // Added to ensure proper stacking
+    width: 48%; // Added to constrain width and prevent overlap
 
     .content {
       max-width: 600px;
@@ -92,6 +94,7 @@
     align-items: center;
     justify-content: center;
     transition: background-color 0.3s ease;
+    z-index: 1; // Lower z-index so left section appears above
 
     .image-container {
       width: 100%;
@@ -193,6 +196,7 @@
   @media screen and (max-width: 1200px) {
     .left-section {
       padding: 60px 40px;
+      width: 55%; // Adjusted for smaller screens
       .content {
         .mainTitle { font-size: 32px; line-height: 56px; }
         .subText { font-size: 16px; line-height: 24px; }
@@ -220,6 +224,7 @@
     flex-direction: column;
     .left-section {
       padding: 40px 20px; order: 1;
+      width: 100%; // Full width on mobile
       .content {
         text-align: center;
         .mainTitle { font-size: 28px; line-height: 48px; }
